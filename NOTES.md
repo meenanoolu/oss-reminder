@@ -1,30 +1,66 @@
 # Build notes
 
-## v1: one prompt for everything (gemma3:4b)
+Goal: help a friend (beginner in open source) not miss GSoC / Outreachy / LFX / KDE dates,
+and know what to prepare. Gemma 3 4B runs locally through Ollama and reads saved page text.
+Plain code does the date filtering and the final alerts.
+
+## How I score each version
+I compare the model output line by line with the official page text I saved.
+Wrong = false or flipped. Missing = a real rule/date left out.
+
+## v1: one prompt for everything
 - Dates: 14/18 correct, 1 half-right, 3 wrong, 1 missing
-- Wrong dates were all near the end of the list (final evaluations, extended coding)
+- The wrong dates were all near the end of the list (final evaluations, extended coding)
 - Ignored my "only future dates" rule: 16 of 18 dates were already past
 - Eligibility: 4 of 6 points found, missed the embargo rule and the "2+ times before" rule
 - "start_here" was just link text from the page, not real advice
 - Lesson: don't ask a small model to filter dates or do too many jobs at once
 
-## v2: separate prompts, code-side date filter (gemma3:4b)
-- dates: correctly empty (all 2026 dates have passed). Gemma found 9 pre-selection dates, code filtered them out
-- eligibility: all 8 real rules found now (embargo and "2 or more times" rules fixed)
-  but 3 extra lines came from the timeline page's intro text, and one is WRONG:
-  "Applicants must be students" (the rules say "a student OR a beginner")
-- prepare: 2 right, 1 wrong stage ("submit final work product" is after selection)
-- typical_timing: BAD. Gemma copied the exact 2026 dates (including post-selection ones)
+## v2: separate prompts, code-side date filter
+- dates: correctly empty (Gemma found 9 pre-selection dates, code filtered all of them out)
+- eligibility: all rules found, but 3 extra lines came from the timeline page's intro text,
+  and one was WRONG: "Applicants must be students" (the rules say "a student OR a beginner")
+- prepare: 2 right, 1 wrong stage ("submit final work product" happens after selection)
+- typical_timing: BAD. Gemma copied exact 2026 dates (including post-selection ones)
   instead of the month-level pattern, and added "Not specified" lines
-- Lesson: I ran the "info" prompt on every page, so marketing text and timeline dates leaked in.
-  And asking the model to reformat a list is a job plain code does better
+- Lesson: I ran the "info" prompt on every page, so marketing text and dates leaked in.
+  Reformatting a list is a job plain code does better than the model
 
 ## v3: eligibility only from rules pages, typical_timing built by code
-- dates: correctly empty (9 found, all past, filtered by code)
-- typical_timing: correct, built by plain Python (no AI). A few org-side lines remain, harmless for now
+- dates: correctly empty
+- typical_timing: correct, built by plain Python (no AI). A few org-side lines remain
 - prepare: 2/2 correct
-- eligibility: 7/8 correct, but 1 line has a flipped meaning:
-  "have previously participated ... two or more times" is a DISQUALIFIER in the rules, 
+- eligibility: all rules present, but 1 had a FLIPPED meaning:
+  "have previously participated ... two or more times" is a disqualifier in the rules,
   the model dropped the "not". Dangerous: a beginner could read it as a requirement
-- Lesson: small models can lose negation when rules are mixed in one list
-- Next (v4): separate "requirements" from "cannot apply if" so a dropped "not" can't flip a rule
+- Lesson: small models can lose negation when requirements and disqualifiers share one list
+
+## v4: split requirements from disqualifiers
+- Two lists: eligibility (what you must be) and cannot_apply_if (each starts "You cannot apply if")
+- Result: 9 of 10 rules found, 0 flipped. The flipped rule is fixed
+- New omission: "not be an Organization Administrator or Mentor" was dropped (v3 had it).
+  Low impact for a beginner, but still a gap
+- Also not listed: the rule allowing up to 3 proposals (nice-to-have)
+- Decision: stop tuning GSoC here. An omission is less dangerous than a flip,
+  and every message links the official rules page so my friend can double-check
+
+## Summary table (GSoC)
+| | v1 | v2 | v3 | v4 |
+|---|---|---|---|---|
+| dates | 3 wrong, 1 missing, past dates included | correct (empty) | correct (empty) | correct (empty) |
+| eligibility | 4 of 6 found | all found, 3 junk lines + 1 wrong | all found, 1 flipped | 9 of 10 found, 0 flipped |
+| typical_timing | month labels lost | copied exact 2026 dates | correct (code) | correct (code) |
+
+## Design lessons so far
+1. Use the AI only where it adds something (reading messy text). Dates, filtering, month lists and source links are done by code
+2. One focused job per prompt works better than one big prompt
+3. Never let the model decide what is "in the future". Code does that
+4. Every message shows the source link and the snapshot date so my friend can verify
+5. Wrong-but-believable answers are worse than missing ones, so I check every output by hand
+
+## Still to do
+- Notifications (ntfy push + email)
+- Scheduler: 7 days and 1 day before each date, at 5:30 PM IST
+- Other programs: Outreachy, LFX, Season of KDE
+- Refresh script and "dates changed" alert
+- Give it to my friend and write down what they said

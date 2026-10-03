@@ -20,8 +20,9 @@ TEXT:
 """
 
 INFO_PROMPT = """Using ONLY the text below, return JSON:
-{"eligibility": [str], "prepare": [str]}
-- eligibility: every formal requirement AND every disqualifier for an applicant (age, student status, country, past participation, and so on). Ignore organization and mentor rules, and ignore general descriptions of the program.
+{"eligibility": [str], "cannot_apply_if": [str], "prepare": [str]}
+- eligibility: what an applicant MUST be or have (age, student status, work eligibility, and so on). Write each as a positive requirement.
+- cannot_apply_if: situations that stop someone from applying. Write each starting with "You cannot apply if". Ignore organization and mentor rules, and ignore general descriptions of the program.
 - prepare: what an applicant must do or submit in order to APPLY. Do not include anything that happens after being accepted.
 Never guess. Use an empty list if the text has nothing for a key.
 Write short, simple points for a beginner.
@@ -68,7 +69,7 @@ blocks = re.findall(
 if not blocks:
     sys.exit("No blocks found. Each source must start with: SOURCE: <url> | dates   (or | rules)")
 
-result = {"program": name, "dates": [], "eligibility": [], "prepare": [], "typical_timing": []}
+result = {"program": name, "dates": [], "eligibility": [], "cannot_apply_if": [], "prepare": [], "typical_timing": []}
 all_dates = []
 
 for url, kind, body in blocks:
@@ -80,7 +81,7 @@ for url, kind, body in blocks:
         result["typical_timing"] += typical_timing(body)
     if kind == "rules":
         info = ask(INFO_PROMPT, body)
-        for key in ("eligibility", "prepare"):
+        for key in ("eligibility", "cannot_apply_if", "prepare"):
             for item in info.get(key, []):
                 if item not in result[key]:
                     result[key].append(item)
