@@ -3,6 +3,8 @@ import json, re, sys, datetime, ollama
 MODEL = "gemma3:4b"
 TODAY = datetime.date.today()
 OPTIONS = {"num_ctx": 8192, "temperature": 0}
+MONTHS = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"]
 
 DATES_PROMPT = """Extract every dated event from the timeline text below.
 Return JSON: {"dates": [{"event": str, "start_date": "YYYY-MM-DD", "end_date": "YYYY-MM-DD", "time_utc": "HH:MM" or null}]}
@@ -18,10 +20,9 @@ TEXT:
 """
 
 INFO_PROMPT = """Using ONLY the text below, return JSON:
-{"eligibility": [str], "prepare": [str], "typical_timing": [str]}
-- eligibility: every requirement AND every disqualifier for an applicant (age, student status, country, past participation, and so on). Ignore organization and mentor rules.
-- prepare: what an applicant must do or submit to apply.
-- typical_timing: the approximate month-level pattern, written as "Month: what happens", only up to when accepted contributors are announced.
+{"eligibility": [str], "prepare": [str]}
+- eligibility: every formal requirement AND every disqualifier for an applicant (age, student status, country, past participation, and so on). Ignore organization and mentor rules, and ignore general descriptions of the program.
+- prepare: what an applicant must do or submit in order to APPLY. Do not include anything that happens after being accepted.
 Never guess. Use an empty list if the text has nothing for a key.
 Write short, simple points for a beginner.
 
@@ -43,6 +44,22 @@ def to_date(s):
     except ValueError:
         return None
 
+def typical_timing(body):
+    """Plain code, no AI: turn the 'General Timing' month list into 'Month: event' lines."""
+    if "General Timing" not in body:
+        return []
+    section = body.split("General Timing", 1)[1]
+    out, month = [], None
+    for line in section.splitlines():
+        line = line.strip()
+        if line in MONTHS:
+            month = line
+        elif month and line:
+            if line.lower().startswith("community bonding"):
+                break  # everything after this is post-selection
+            out.append(f"{month}: {line}")
+    return out
+
 name = sys.argv[1]
 text = open(f"snapshots/{name}.txt", encoding="utf-8").read()
 blocks = re.findall(
@@ -57,15 +74,16 @@ all_dates = []
 for url, kind, body in blocks:
     body = body[:9000]
     if kind == "dates":
-        # Safety net: cut off everything after results are announced,
-        # so the model never sees (or mangles) the post-selection dates.
+        # Safety net: the model never sees the post-selection dates
         before_selection = body.split("Community Bonding Period")[0]
         all_dates += ask(DATES_PROMPT, before_selection).get("dates", [])
-    info = ask(INFO_PROMPT, body)
-    for key in ("eligibility", "prepare", "typical_timing"):
-        for item in info.get(key, []):
-            if item not in result[key]:
-                result[key].append(item)
+        result["typical_timing"] += typical_timing(body)
+    if kind == "rules":
+        info = ask(INFO_PROMPT, body)
+        for key in ("eligibility", "prepare"):
+            for item in info.get(key, []):
+                if item not in result[key]:
+                    result[key].append(item)
 
 # Filtering is done by code, not by the model
 for d in all_dates:
