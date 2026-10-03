@@ -1,0 +1,136 @@
+{
+  "program": "Google Summer of Code",
+  "dates": [
+    {
+      "event": "Mentoring organizations can begin submitting applications to Google",
+      "date": "2026-01-19",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Mentoring organization application deadline",
+      "date": "2026-02-03",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Google program administrators review organization applications",
+      "date": "2026-02-03",
+      "timezone": "UTC"
+    },
+    {
+      "event": "List of accepted mentoring organizations published",
+      "date": "2026-02-19",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Potential GSoC contributors discuss application ideas with mentoring organizations",
+      "date": "2026-02-19 – 2026-03-15",
+      "timezone": null
+    },
+    {
+      "event": "GSoC contributor application period begins",
+      "date": "2026-03-16",
+      "timezone": "UTC"
+    },
+    {
+      "event": "GSoC contributor application deadline",
+      "date": "2026-03-31",
+      "timezone": "UTC"
+    },
+    {
+      "event": "GSoC contributor proposal rankings due from Org Admins",
+      "date": "2026-04-21",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Accepted GSoC contributor projects announced",
+      "date": "2026-04-30",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Community Bonding Period",
+      "date": "2026-05-01 – 2026-05-24",
+      "timezone": null
+    },
+    {
+      "event": "Coding officially begins!",
+      "date": "2026-05-25",
+      "timezone": null
+    },
+    {
+      "event": "Mentors and GSoC contributors can begin submitting midterm evaluations (for standard 12 week coding projects)",
+      "date": "2026-07-06",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Midterm evaluation deadline (standard coding period)",
+      "date": "2026-07-10",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Work Period",
+      "date": "2026-07-06 – 2026-08-16",
+      "timezone": null
+    },
+    {
+      "event": "Final week: GSoC contributors submit their final work product and their final mentor evaluation",
+      "date": "2026-08-17 – 2026-08-24",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Mentors submit final GSoC contributor evaluations",
+      "date": "2026-08-24 – 2026-08-31",
+      "timezone": "UTC"
+    },
+    {
+      "event": "GSoC contributors with extended timelines continue coding",
+      "date": "2026-08-24 – 2026-11-02",
+      "timezone": null
+    },
+    {
+      "event": "Final date for all GSoC contributors to submit their final work product and final evaluation",
+      "date": "2026-11-02",
+      "timezone": "UTC"
+    },
+    {
+      "event": "Final date for mentors to submit evaluations for GSoC contributor projects with extended deadlines",
+      "date": "2026-11-09",
+      "timezone": "UTC"
+    }
+  ],
+  "typical_timing": [
+    "Mentoring Organization applications open for OSS projects (application period is 2 weeks)",
+    "Mentoring Org Applications close",
+    "Google reviews all Mentoring Org applications (3 week period)",
+    "Accepted Mentoring Organizations announced publicly",
+    "Interested applicants reach out to Mentoring Orgs to discuss their project ideas (4 weeks)",
+    "Aspiring GSoC contributors apply and submit their project proposals to orgs (15 day period)",
+    "GSoC contributor applications close",
+    "Mentors and Org Admins review all contributor applications and rank their selections",
+    "Google Admins review Org requests and resolve duplicative selections",
+    "Accepted GSoC contributors are announced",
+    "Community Bonding period (3 week period for contributors to understand codebase, start integrating into their OSS community, set milestones with mentors, etc.)",
+    "Coding Period Begins (~75% of projects are 12 weeks; project length can be 8-22 weeks)",
+    "Most contributors finish their projects",
+    "All 22 week projects are completed"
+  ],
+  "eligibility": [
+    "Be eighteen (18) years of age or older upon registration for the Program",
+    "Be eligible to work in the country in which they reside",
+    "Not be an Organization Administrator or Mentor in the Program",
+    "Be a student or a beginner to open source software development"
+  ],
+  "prepare": [
+    "Accept the terms of the GSoC Contributor Agreement",
+    "Submit a Project Proposal through the Program Website during the application period"
+  ],
+  "start_here": [
+    "Review organization eligibility requirements",
+    "Review contributor eligibility requirements"
+  ],
+  "sources": [
+    "https://developers.google.com/open-source/gsoc/timeline",
+    "https://summerofcode.withgoogle.com/get-started",
+    "https://summerofcode.withgoogle.com/rules"
+  ],
+  "snapshot_date": "2026-10-03"
+}
