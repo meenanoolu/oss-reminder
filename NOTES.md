@@ -64,3 +64,9 @@ Wrong = false or flipped. Missing = a real rule/date left out.
 - Other programs: Outreachy, LFX, Season of KDE
 - Refresh script and "dates changed" alert
 - Give it to my friend and write down what they said
+
+## Notifications (ntfy)
+- Sends 2 push messages per program: "dates" and "can you apply?"
+- When no dates are announced, the message says so and shows the usual month pattern
+- Topic name is private (config.json is in .gitignore). Public ntfy topics have no password,
+  so a guessable name would let strangers read/send to it
