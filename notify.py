@@ -1,4 +1,9 @@
 import json, sys, requests
+import re
+
+def short(text):
+    # remove "(...)" asides only; keeps the full meaning of each rule
+    return re.sub(r"\s*\([^)]*\)", "", text).strip()
 
 name = sys.argv[1]                      # e.g. gsoc
 data = json.load(open(f"data/{name}.json", encoding="utf-8"))
@@ -32,9 +37,10 @@ else:
 send(f"{TITLE}: dates", body1 + footer, click=link, tags="calendar")
 
 # Message 2: can you apply, and what to prepare
-body2 = ("You can apply if you:\n" + "\n".join(f"- {e}" for e in data["eligibility"]) +
+body2 = ("You can apply if you:\n" + "\n".join(f"- {short(e)}" for e in data["eligibility"]) +
+         "\n\nTo apply:\n" + "\n".join(f"- {short(p)}" for p in data["prepare"]) +
          "\n\nYou cannot apply if:\n" +
-         "\n".join(f"- {c.replace('You cannot apply if ', '')}" for c in data["cannot_apply_if"]) +
-         "\n\nTo apply:\n" + "\n".join(f"- {p}" for p in data["prepare"]))
+         "\n".join(f"- {short(c.replace('You cannot apply if ', ''))}" for c in data["cannot_apply_if"]) +
+         "\n\nTap to open the official rules.")
 send(f"{TITLE}: can you apply?", body2 + footer, click=data["sources"][-1], tags="white_check_mark")
 print("sent 2 messages")

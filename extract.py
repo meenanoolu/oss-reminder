@@ -21,7 +21,7 @@ TEXT:
 
 INFO_PROMPT = """Using ONLY the text below, return JSON:
 {"eligibility": [str], "cannot_apply_if": [str], "prepare": [str]}
-- eligibility: what an applicant MUST be or have (age, student status, work eligibility, and so on). Write each as a positive requirement.
+- eligibility: what an applicant MUST be or have (age, student status, work eligibility, and so on). Write each one starting with "You can apply if you" followed by a verb, using digits for numbers and "you/your" instead of "they/their". Example: "You can apply if you are 18 or older".
 - cannot_apply_if: situations that stop someone from applying. Write each starting with "You cannot apply if". Ignore organization and mentor rules, and ignore general descriptions of the program.
 - prepare: what an applicant must do or submit in order to APPLY. Do not include anything that happens after being accepted.
 Never guess. Use an empty list if the text has nothing for a key.

@@ -44,12 +44,36 @@ Wrong = false or flipped. Missing = a real rule/date left out.
 - Decision: stop tuning GSoC here. An omission is less dangerous than a flip,
   and every message links the official rules page so my friend can double-check
 
-## Summary table (GSoC)
-| | v1 | v2 | v3 | v4 |
-|---|---|---|---|---|
-| dates | 3 wrong, 1 missing, past dates included | correct (empty) | correct (empty) | correct (empty) |
-| eligibility | 4 of 6 found | all found, 3 junk lines + 1 wrong | all found, 1 flipped | 9 of 10 found, 0 flipped |
-| typical_timing | month labels lost | copied exact 2026 dates | correct (code) | correct (code) |
+## v5: sentence-style eligibility (prompt change)
+- Wording now starts "You can apply if you ..." as I wanted
+- But content got worse: 7 of 10 rules complete, 1 partial, 2 missing, 0 flipped (v4 was 9 of 10)
+  - dropped "eligible to work in your country"
+  - employee rule lost "or an Organization or any of its affiliates"
+  - still missing "not an Organization Administrator or Mentor"
+- I had not touched the cannot_apply_if prompt, yet its output changed
+- Lesson: one prompt edit shifts all the other answers. Re-check every field after any change
+- Decision: go back to the v4 prompt and let code do the wording (v6)
+
+| | v1 | v2 | v3 | v4 | v5 |
+|---|---|---|---|---|---|
+| dates | 3 wrong, 1 missing, past dates included | correct (empty) | correct (empty) | correct (empty) | correct (empty) |
+| eligibility | 4 of 6 found | all found, 3 junk lines + 1 wrong | all found, 1 flipped | 9 of 10 found, 0 flipped | 7 of 10 complete, 1 partial, 0 flipped |
+| typical_timing | month labels lost | copied exact 2026 dates | correct (code) | correct (code) | correct (code) |
+
+## Notifications (ntfy)
+- Sends 2 push messages per program: "dates" and "can you apply?"
+- When no dates are announced, the message says so and shows the usual month pattern
+- Topic name is private (config.json is in .gitignore). Public ntfy topics have no password,
+  so a guessable name would let strangers read/send to it
+
+## Notifications: first real test on my phone
+- ntfy works end to end. Android cuts long messages in the notification shade
+- Reordered so "To apply" comes before the long "cannot apply" list
+- Removed "(...)" asides with plain code instead of truncating, because cutting at a length
+  could remove "two or more times" and flip a rule again
+- Screenshots saved for the post (before and after the reorder)
+- Wording problem I spotted: "be eighteen years of age or older" under "You can apply if you:"
+  reads badly. Fix: write requirements as full sentences, the same way cannot_apply_if works
 
 ## Design lessons so far
 1. Use the AI only where it adds something (reading messy text). Dates, filtering, month lists and source links are done by code
@@ -57,16 +81,11 @@ Wrong = false or flipped. Missing = a real rule/date left out.
 3. Never let the model decide what is "in the future". Code does that
 4. Every message shows the source link and the snapshot date so my friend can verify
 5. Wrong-but-believable answers are worse than missing ones, so I check every output by hand
+6. Test the output on a real phone, not just in the terminal. That is how I found the cut-off messages
 
 ## Still to do
-- Notifications (ntfy push + email)
+- Email backup
 - Scheduler: 7 days and 1 day before each date, at 5:30 PM IST
 - Other programs: Outreachy, LFX, Season of KDE
 - Refresh script and "dates changed" alert
 - Give it to my friend and write down what they said
-
-## Notifications (ntfy)
-- Sends 2 push messages per program: "dates" and "can you apply?"
-- When no dates are announced, the message says so and shows the usual month pattern
-- Topic name is private (config.json is in .gitignore). Public ntfy topics have no password,
-  so a guessable name would let strangers read/send to it
