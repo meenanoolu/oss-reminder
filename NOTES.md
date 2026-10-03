@@ -77,6 +77,9 @@ The GSoC contributor rules page has 10 rules: 4 requirements and 6 disqualifiers
   ("You cannot apply if otherwise prohibited ..."), so the code needs a special case for it
 - Notification tap: removed tap-to-open-link, added an "Open official page" button instead,
   so the full message can be read in the ntfy app first
+- Phone check: wording reads correctly ("are eighteen years of age or older").
+  Tapping the notification opens the ntfy app, and the official-page link is at the end of the message.
+  Tapping the message text in the app copies it (ntfy default), so the link is what to tap.
 
 ## Summary table (GSoC)
 | | v1 | v2 | v3 | v4 | v5 | v6 |
