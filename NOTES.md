@@ -158,6 +158,28 @@ The Outreachy eligibility page has 16 rules by my count.
 - Decision: one call per page. reviewed/outreachy.json was drafted with Claude's help from the
   official pages and is what the phone message uses
 
+## Notifications: long messages got cut in the app (found Oct 4)
+- Outreachy's "can you apply?" message was 2259 bytes and the app cut it after about 400 characters.
+  After I split it to about 1800 bytes, a different cut: it stopped in the middle of the "Good to know" rules
+  ("Students in In"). The shorter dates message always showed in full
+- Two different cut points mean it is not a fixed character limit. I do not know the app's rule
+- Fix: notify.py groups whole sections into messages under 900 bytes, prints each size, and sends in reverse
+  order so they read top to bottom. "Good to know" moved next to "can apply", since it holds the cohort rules
+- Lesson: a test on the terminal is not a test on the phone. The cohort rules were the lines that got cut  
+
+## Scheduler (remind.py)
+- Runs daily at 17:30 IST (inside my friend's 5-7 PM phone window) through Windows Task Scheduler
+- For each upcoming date: reminders at 7 days and 1 day left, counted in IST. The UTC time on the page
+  is converted to IST first, so a late-evening UTC deadline is not counted a day early or late
+- sent.json stops duplicates. If the laptop was off on day 7, a catch-up reminder goes out the next time it runs
+- Only dates an applicant can still act on become reminders. Outreachy's remaining dates are for approved
+  applicants only, so they never become reminders. Organization-side GSoC events are skipped by a word list
+- Demo mode: --today 2026-03-24 pretends it is a week before the 2026 GSoC deadline. Demo reminders are
+  only ever sent to my own phone, and their titles start with DEMO
+- extract.py now also saves past_dates, which only the demo mode reads
+- Limits: dates only change when I refresh the snapshots by hand, and the laptop has to be on at 17:30.
+  Hosting the scheduler is future work
+
 ## Summary table (GSoC)
 | | v1 | v2 | v3 | v4 | v5 | v6 | v7 |
 |---|---|---|---|---|---|---|---|

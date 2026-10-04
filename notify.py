@@ -1,4 +1,6 @@
-import json, os, sys, re, requests
+import json, os, sys, re, time, requests
+
+MAX_BYTES = 900   # the phone cut a longer message, so each message stays about as short as the dates one
 
 def short(text):
     # remove "(...)" asides only; keeps the full meaning of each rule.
@@ -20,6 +22,38 @@ def as_cannot(text):
     if t.startswith("otherwise prohibited"):
         t = "you are " + t
     return t
+
+def nbytes(s):
+    return len(s.encode("utf-8"))
+
+def pack(parts, limit):
+    """Group whole sections into messages under the limit. A section that is too long is split by line."""
+    pieces = []
+    for part in parts:
+        if nbytes(part) <= limit:
+            pieces.append(part)
+        else:
+            cur = ""
+            for line in part.split("\n"):
+                trial = cur + "\n" + line if cur else line
+                if cur and nbytes(trial) > limit:
+                    pieces.append(cur)
+                    cur = line
+                else:
+                    cur = trial
+            if cur:
+                pieces.append(cur)
+    messages, cur = [], ""
+    for p in pieces:
+        trial = cur + "\n\n" + p if cur else p
+        if cur and nbytes(trial) > limit:
+            messages.append(cur)
+            cur = p
+        else:
+            cur = trial
+    if cur:
+        messages.append(cur)
+    return messages
 
 name = sys.argv[1]                      # e.g. gsoc
 # a file I checked by hand against the official pages wins over the raw model output
@@ -44,12 +78,15 @@ def send(title, body, link=None, tags=None):
     r = requests.post(f"https://ntfy.sh/{topic}", data=body.encode("utf-8"), headers=headers)
     r.raise_for_status()
 
-footer = f"\n\nAs of {data['snapshot_date']}."
+base_footer = f"As of {data['snapshot_date']}. Always double-check on the official page."
+hand = ""
 if path == reviewed_path and data.get("reviewed_on"):
-    footer += f" Rules checked by hand on {data['reviewed_on']}."
-footer += " Always double-check on the official page."
+    hand = f"Rules checked by hand on {data['reviewed_on']}. "
+rules_footer = "\n\n" + hand + base_footer
 
-# Message 1: dates (dates_for_approved_applicants are never sent as reminders)
+outbox = []   # (title, body, link, tags) in reading order
+
+# Message: dates (dates_for_approved_applicants are never sent as reminders)
 if data["dates"]:
     lines = [f"- {d['event']}: {d['start_date']} to {d['end_date']}" for d in data["dates"]]
     body1 = "Upcoming dates:\n" + "\n".join(lines)
@@ -59,17 +96,29 @@ else:
             if data.get("applications_closed")
             else "Next dates are NOT announced yet. I'll tell you as soon as they appear.")
     body1 = head + "\n\nUsually:\n" + "\n".join(f"- {short(t)}" for t in timing)
-send(f"{TITLE}: dates", body1 + footer, link=data["sources"][0], tags="calendar")
+outbox.append((f"{TITLE}: dates", body1 + "\n\n" + base_footer, data["sources"][0], "calendar"))
 
-# Message 2: can you apply, and what to prepare
-can = [as_sentence(e) for e in data["eligibility"]]
-cannot = [as_cannot(c) for c in data["cannot_apply_if"]]
-body2 = ("You can apply if you:\n" + "\n".join(f"- {c}" for c in can) +
-         "\n\nTo apply:\n" + "\n".join(f"- {short(p)}" for p in data["prepare"]) +
-         "\n\nYou cannot apply if:\n" + "\n".join(f"- {c}" for c in cannot))
+# Messages: can you apply, what to prepare. "Good to know" sits next to "can apply"
+# because it holds the cohort rules
+can_part = "You can apply if you:\n" + "\n".join(f"- {as_sentence(e)}" for e in data["eligibility"])
 good = data.get("good_to_know", [])
-if good:
-    body2 += "\n\nGood to know:\n" + "\n".join(f"- {g}" for g in good)
-body2 += "\n\nOpen this message in the ntfy app to read it all."
-send(f"{TITLE}: can you apply?", body2 + footer, link=data["sources"][-1], tags="white_check_mark")
-print("sent 2 messages")
+good_part = ("Good to know:\n" + "\n".join(f"- {g}" for g in good)) if good else ""
+prep_part = "To apply:\n" + "\n".join(f"- {short(p)}" for p in data["prepare"])
+cannot_part = "You cannot apply if:\n" + "\n".join(f"- {as_cannot(c)}" for c in data["cannot_apply_if"])
+parts = [p for p in (can_part, good_part, prep_part, cannot_part) if p]
+
+chunks = pack(parts, MAX_BYTES - nbytes(rules_footer))
+for i, body in enumerate(chunks, 1):
+    title = f"{TITLE}: can you apply?" + (f" ({i}/{len(chunks)})" if len(chunks) > 1 else "")
+    if i == len(chunks):
+        body += rules_footer
+    outbox.append((title, body, data["sources"][-1], "white_check_mark"))
+
+for title, body, link, tags in outbox:
+    print(f"{title}: {nbytes(body)} bytes")
+
+# Newest shows on top in the app, so send in reverse (with a pause) to read top to bottom
+for title, body, link, tags in reversed(outbox):
+    send(title, body, link=link, tags=tags)
+    time.sleep(1.1)
+print(f"sent {len(outbox)} messages")

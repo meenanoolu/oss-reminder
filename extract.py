@@ -182,13 +182,15 @@ for url, kind, body in blocks:
 clean_up(result)
 
 # Filtering is done by code, not by the model
-upcoming = []
+upcoming, past = [], []
 for d in all_dates:
     end = to_date(d.get("end_date"))
     if end is None:
         print("WARNING: unreadable date, check by hand:", d)
     elif end >= TODAY:
         upcoming.append(d)
+    else:
+        past.append(d)
 
 # If the page itself says applications are closed, remaining dates are only for approved applicants
 if any(p in text.lower() for p in CLOSED_PHRASES):
@@ -199,6 +201,8 @@ else:
     result["dates"] = upcoming
     if not upcoming:
         result["note"] = "No upcoming application dates found on the page (next season may not be announced yet)."
+
+result["past_dates"] = past   # only used by remind.py --today (the demo)
 
 # These come from code, not from the AI, so they can't be made up
 result["sources"] = list(dict.fromkeys(b[0] for b in blocks))

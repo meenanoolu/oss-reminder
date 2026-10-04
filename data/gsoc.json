@@ -31,6 +31,62 @@
     "May: Accepted GSoC contributors are announced"
   ],
   "note": "No upcoming application dates found on the page (next season may not be announced yet).",
+  "past_dates": [
+    {
+      "event": "January 19 - 18:00 UTC",
+      "start_date": "2026-01-19",
+      "end_date": "2026-01-19",
+      "time_utc": "18:00"
+    },
+    {
+      "event": "February 3 - 18:00 UTC",
+      "start_date": "2026-02-03",
+      "end_date": "2026-02-03",
+      "time_utc": "18:00"
+    },
+    {
+      "event": "February 3 - 18",
+      "start_date": "2026-02-03",
+      "end_date": "2026-02-03",
+      "time_utc": null
+    },
+    {
+      "event": "February 19 - 18:00 UTC",
+      "start_date": "2026-02-19",
+      "end_date": "2026-02-19",
+      "time_utc": "18:00"
+    },
+    {
+      "event": "February 19 - March 15",
+      "start_date": "2026-02-19",
+      "end_date": "2026-03-15",
+      "time_utc": null
+    },
+    {
+      "event": "March 16 - 18:00 UTC",
+      "start_date": "2026-03-16",
+      "end_date": "2026-03-16",
+      "time_utc": "18:00"
+    },
+    {
+      "event": "March 31 - 18:00 UTC",
+      "start_date": "2026-03-31",
+      "end_date": "2026-03-31",
+      "time_utc": "18:00"
+    },
+    {
+      "event": "April 21 - 18:00 UTC",
+      "start_date": "2026-04-21",
+      "end_date": "2026-04-21",
+      "time_utc": "18:00"
+    },
+    {
+      "event": "April 30 - 18:00 UTC",
+      "start_date": "2026-04-30",
+      "end_date": "2026-04-30",
+      "time_utc": "18:00"
+    }
+  ],
   "sources": [
     "https://developers.google.com/open-source/gsoc/timeline",
     "https://summerofcode.withgoogle.com/get-started",
