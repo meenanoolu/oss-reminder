@@ -1,0 +1,60 @@
+{
+  "program": "outreachy",
+  "dates": [],
+  "eligibility": [
+    "be 18 years of age or older by Dec. 7, 2026",
+    "be available for a full-time internship (30 hours per week)",
+    "if you are a student, have 42 consecutive days free from school and exams during the internship",
+    "if you are a student on a visa, have a visa that allows you to work 30 hours per week"
+  ],
+  "cannot_apply_if": [
+    "You cannot apply if you are a past Outreachy intern",
+    "You cannot apply if you are a past Outreach Program for Women intern",
+    "You cannot apply if you are a past Google Summer of Code intern, even if you did not finish it",
+    "You cannot apply if you have another internship during the internship period, including unpaid ones",
+    "You cannot apply if you have a full-time job during the internship period. If you are willing to quit it, you can still apply",
+    "You cannot apply if you have a full-time contracting position during the internship period",
+    "You cannot apply if you are on a leave of absence from a full-time job during the internship period",
+    "You cannot apply if you are a student planning to take a school term off to do the internship"
+  ],
+  "prepare": [
+    "Write answers to the five essay questions first and keep them in a personal document. Answers are limited to 1000 characters",
+    "Do not use generative AI to write or edit the essays",
+    "Academic calendar for this year and future terms, if you are a university student",
+    "Calendar for your online courses or coding school cohort, if you take them",
+    "Employment contract, weekly hours, start and end dates, if you are employed",
+    "Average invoiced hours over the past six months, if you are self-employed",
+    "List your current internships and jobs on the initial application",
+    "The application cannot be saved. Fill it in one go with a stable internet connection"
+  ],
+  "good_to_know": [
+    "If you are not a student, you may apply to either round (May to August or December to March)",
+    "Students at universities in the northern hemisphere can only apply to the May to August round. Students in India count as northern hemisphere",
+    "Students at southern hemisphere universities can only apply to the December to March round. Near the equator it is decided case by case",
+    "If you are in your last term, you can only apply to the round for your school's hemisphere. After you graduate you may be eligible for both",
+    "Part-time jobs are allowed but must be approved by Outreachy organizers",
+    "You can apply more than once, but you can only be accepted once"
+  ],
+  "typical_timing": [
+    "Initial applications open: early February for the May-Aug round, late August for the Dec-Mar round",
+    "Initial applications due: end of February for the May-Aug round, early September for the Dec-Mar round",
+    "Contribution period opens: mid March for the May-Aug round, early October for the Dec-Mar round",
+    "Contribution period ends: mid April for the May-Aug round, end of October for the Dec-Mar round",
+    "Interns announced: mid May for the May-Aug round, late November for the Dec-Mar round"
+  ],
+  "applications_closed": true,
+  "dates_for_approved_applicants": [
+    {"event": "Initial application results available", "start_date": "2026-10-05", "end_date": "2026-10-05", "time_utc": "16:00"},
+    {"event": "Contribute to projects", "start_date": "2026-10-05", "end_date": "2026-11-02", "time_utc": null},
+    {"event": "Final application deadline", "start_date": "2026-11-02", "end_date": "2026-11-02", "time_utc": "16:00"},
+    {"event": "Accepted interns announced", "start_date": "2026-11-30", "end_date": "2026-11-30", "time_utc": "16:00"}
+  ],
+  "note": "The current round is closed to new applicants. Any dates listed are only for people already approved.",
+  "sources": [
+    "https://www.outreachy.org/apply/project-selection/",
+    "https://www.outreachy.org/docs/applicant/",
+    "https://www.outreachy.org/apply/eligibility/"
+  ],
+  "snapshot_date": "2026-10-04",
+  "reviewed_on": "2026-10-04"
+}

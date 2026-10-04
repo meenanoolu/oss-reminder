@@ -8,6 +8,7 @@ Plain code does the date filtering and the final alerts.
 I compare the model output line by line with the official page text I saved.
 Wrong = false or flipped. Missing = a real rule/date left out.
 The GSoC contributor rules page has 10 rules: 4 requirements and 6 disqualifiers.
+The Outreachy eligibility page has 16 rules by my count.
 
 ## v1: one prompt for everything
 - Dates: 14/18 correct, 1 half-right, 3 wrong, 1 missing
@@ -109,11 +110,69 @@ The GSoC contributor rules page has 10 rules: 4 requirements and 6 disqualifiers
 - Outreachy bans generative AI in initial application essays, so the tool only relays page text
   and never writes essays
 
+## Outreachy: first run (v7)
+- The model returned 0 dates from the closed-round timeline table. The cross-check warned
+  (about 8 date lines, 0 found). Both zero-date runs (the GSoC regression and this one) had the
+  Outreachy-only year/time rules in the prompt, so those are my suspect. Not proven
+- Eligibility checked by hand against the page (16 rules): 11 correct, 1 garbled, 4 missing
+  - garbled: the last-term rule came out as "cannot apply if you are completing your last term ..."
+  - missing: part-time jobs need approval; student cohort by hemisphere (India counts as north);
+    students taking a term off are not eligible; non-students may apply to either round
+- Junk: 5 lines like "You are a university student" / "You are (or will be) employed" in eligibility.
+  They came from the "Documentation needed" list, because my snapshot plan put that text in the rules block.
+  Also "You cannot save your initial application" as a disqualifier
+- Overstated: "cannot apply if you use generative AI" (the page says applicants who use it
+  may not have their application accepted)
+- The same rules appeared in both lists (past interns, jobs) because the model put "Must not ..." lines in eligibility
+- Lesson: the text I feed in matters as much as the prompt. A list of documents to collect is not an eligibility rule
+
+## v8: Outreachy fixes
+- Dates: plain code now reads the timeline table. 4 upcoming rows, all correct (2026 dates, 16:00 UTC),
+  no model involved. This replaced the Outreachy-only date rules from v7 (EXTRA_DATE_RULES is gone)
+- A "prep" block keeps the "Documentation needed" list out of eligibility
+- clean_up() in plain code moves "Must not ..." lines from eligibility to cannot_apply_if and removes duplicates
+- GSoC re-checked with Compare-Object after these changes: identical to v6 apart from the snapshot date
+- Eligibility got WORSE with one call per numbered section (checked by hand, 16 rules):
+  6 correct, 4 partial, 5 missing, 3 wrong. Not a clean A/B, because I also moved the docs block
+  - made up: "You cannot apply if you are not a student". The page says non-students are welcome
+    and can apply to either round. I caught this by hand
+  - wrong: "Have a part-time job" listed as a requirement; "Be willing to quit a full-time job"
+  - lost context: the full-time job, contracting and leave rules lost "during the internship period"
+  - missing: 42-day student rule, hemisphere cohort rule (India = north), last-term rule, part-time approval
+  - junk lines: "applicants around the world", "Current or future internships", "You may apply"
+- Lesson: shorter input did not give better answers. A 4B model read "People who are not students are
+  welcome" as a disqualifier
+- Decision: Outreachy eligibility is reviewed by hand. notify.py uses reviewed/outreachy.json when it exists,
+  adds a "Good to know" section for the cohort rules, and the message says "Rules checked by hand on <date>".
+  The raw model output stays in data/ so the accuracy numbers stay honest
+
+## v8b: Outreachy without per-section chunking
+- Same snapshot and prompts, but the eligibility page goes to the model in one call
+  (CHUNK_RULES_BY_HEADING = set())
+- Checked by hand against the 16 rules: 11 correct, 1 garbled, 4 missing, 0 junk lines
+- Same rule coverage as v7, without v7's junk lines, thanks to the prep block and clean_up()
+- Still garbled: the last-term rule. Still missing: part-time job approval, the hemisphere cohort rule
+  (India counts as north), students taking a term off, non-students may apply to either round
+- My guess that smaller inputs would help was wrong. Possible reason: the section headings gave
+  the model context that chunking removed. Not proven
+- Decision: one call per page. reviewed/outreachy.json was drafted with Claude's help from the
+  official pages and is what the phone message uses
+
+## Summary table (GSoC)
 | | v1 | v2 | v3 | v4 | v5 | v6 | v7 |
 |---|---|---|---|---|---|---|---|
 | dates | 3 wrong, 1 missing, past dates included | correct (empty) | correct (empty) | correct (empty) | correct (empty) | correct (empty) | correct (empty), 9 of 9 found after fix |
 | eligibility | 4 of 6 found | all found, 3 junk lines + 1 wrong | all found, 1 flipped | 9 of 10, 0 flipped | 7 of 10 complete, 1 partial, 0 flipped | 9 of 10, 0 flipped | 9 of 10, 0 flipped |
 | typical_timing | month labels lost | copied exact 2026 dates | correct (code) | correct (code) | correct (code) | correct (code) | correct (code) |
+
+## Summary table (Outreachy eligibility, 16 rules)
+| | v7 first run | v8 (chunked) | v8b (one call per page) |
+|---|---|---|---|
+| correct | 11 | 6 | 11 |
+| wrong / garbled | 1 garbled | 3 wrong | 1 garbled |
+| missing | 4 | 5 | 4 |
+| junk or overstated lines | 5 junk + 1 junk disqualifier + 1 overstated | 3 junk | 0 |
+| dates | 0 found by the model | 7 found by code | 7 found by code |
 
 ## Design lessons so far
 1. Use the AI only where it adds something (reading messy text). Dates, filtering, month lists, grammar fixes and source links are done by code
@@ -124,10 +183,13 @@ The GSoC contributor rules page has 10 rules: 4 requirements and 6 disqualifiers
 6. Test the output on a real phone, not just in the terminal. That is how I found the cut-off messages
 7. After any prompt change, re-check every field, not just the one I edited (v5)
 8. A shared prompt is shared risk. Keep rules that only one program needs in a separate setting
+9. When a small model gets rules wrong, add a human review step. A made-up rule is worse than a missing one
+10. Smaller inputs are not automatically better. I tested chunking and it made things worse
 
 ## Still to do
-- Email backup
-- Scheduler: 7 days and 1 day before each date, at 5:30 PM IST
-- Other programs: Outreachy, LFX, Season of KDE
-- Refresh script and "dates changed" alert
-- Give it to my friend and write down what they said
+- Scheduler: 7 days and 1 day before each date, at 5:30 PM IST, with a demo date so I can show it firing
+- Give it to my friend (their own ntfy topic) and write down what they said
+- README and the DEV post
+- Email backup, if there is time
+- Refresh script and "dates changed" alert, if there is time
+- LFX and Season of KDE: not done yet

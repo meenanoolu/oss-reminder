@@ -1,0 +1,59 @@
+{
+  "program": "outreachy",
+  "dates": [],
+  "eligibility": [
+    "You are a university student",
+    "You are taking online courses",
+    "You are participating in a coding school",
+    "You are (or will be) employed",
+    "You are a self-employed contractor",
+    "Must be 18 years of age or older by Dec. 7, 2026",
+    "Must be available for a full-time internship (30 hours per week)",
+    "Must not be a past Outreachy intern",
+    "Must not be a past Outreach Program for Women intern",
+    "Must not be a past Google Summer of Code intern",
+    "Must not have another internship during the Outreachy internship period",
+    "Must not have a full-time job during the Outreachy internship period",
+    "Must not have a full-time contracting position during the Outreachy internship period",
+    "Must not be on a leave of absence from a full-time job during the Outreachy internship period",
+    "Must have 42 consecutive days free from school and exams during the internship period (for students)",
+    "Your visa must allow you to work 30 hours per week"
+  ],
+  "cannot_apply_if": [
+    "You cannot save your initial application",
+    "You cannot apply if you are using generative AI to create or edit your initial application essays",
+    "You cannot apply if you are a past Outreachy intern.",
+    "You cannot apply if you are a past Outreach Program for Women intern.",
+    "You cannot apply if you are a past Google Summer of Code intern.",
+    "You cannot apply if you have another internship during the Outreachy internship period.",
+    "You cannot apply if you have a full-time job during the Outreachy internship period.",
+    "You cannot apply if you have a full-time contracting position during the Outreachy internship period.",
+    "You cannot apply if you are on a leave of absence from a full-time job during the Outreachy internship period.",
+    "You cannot apply if your visa does not allow you to work 30 hours per week.",
+    "You cannot apply if you are completing your last term for your degree and your school is located in the hemisphere where the internship cohort is offered."
+  ],
+  "prepare": [
+    "Write answers to the five essay questions",
+    "Have the following documentation: academic calendar, calendar for online courses, calendar for coding school cohort, employment contract, number of hours per week, employment start date and end date, average number of invoiced hours over the past six months",
+    "Essay answers are limited to 1000 characters (about 200 words)",
+    "Applicants are required to list their current internships on their initial application.",
+    "Applicants are required to list their current jobs on their initial application."
+  ],
+  "typical_timing": [
+    "Initial applications open: early February for the May-Aug round, late August for the Dec-Mar round",
+    "Initial applications due: end of February for the May-Aug round, early September for the Dec-Mar round",
+    "Contribution period opens: mid March for the May-Aug round, early October for the Dec-Mar round",
+    "Contribution period ends: mid April for the May-Aug round, end of October for the Dec-Mar round",
+    "Interns announced: mid May for the May-Aug round, late November for the Dec-Mar round"
+  ],
+  "applications_closed": true,
+  "dates_for_approved_applicants": [],
+  "note": "The current round is closed to new applicants. Any dates listed are only for people already approved.",
+  "sources": [
+    "https://www.outreachy.org/apply/project-selection/",
+    "https://www.outreachy.org/docs/applicant/",
+    "https://www.outreachy.org/apply/eligibility/"
+  ],
+  "snapshot_date": "2026-10-04",
+  "total_dates_found": 0
+}

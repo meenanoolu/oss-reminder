@@ -1,0 +1,84 @@
+{
+  "program": "outreachy",
+  "dates": [],
+  "eligibility": [
+    "applicants around the world",
+    "Be 18 years of age or older by Dec. 7, 2026",
+    "Be available for a full-time internship (30 hours per week)",
+    "Current or future internships",
+    "Have a part-time job",
+    "Be willing to quit a full-time job",
+    "You may apply",
+    "must be able to work 30 hours per week"
+  ],
+  "cannot_apply_if": [
+    "You cannot apply if you are not available for a full-time internship",
+    "You cannot apply if you are a past Outreachy intern.",
+    "You cannot apply if you are a past Outreach Program for Women intern.",
+    "You cannot apply if you are a past Google Summer of Code intern.",
+    "You cannot apply if you have another internship during the Outreachy internship period.",
+    "You cannot apply if you have a full-time job",
+    "You cannot apply if you have a full-time contracting position",
+    "You cannot apply if you are on a leave of absence from a full-time job",
+    "You cannot apply if you are not a student",
+    "You cannot apply if you cannot work 30 hours per week"
+  ],
+  "prepare": [
+    "Have an academic calendar (university student)",
+    "Have a calendar for online courses (online courses)",
+    "Have a calendar for coding school (coding school)",
+    "Have an employment contract (employed)",
+    "Have the average number of invoiced hours over the past six months (self-employed contractor)",
+    "Write answers to five essay questions (essays)",
+    "Essays limited to 1000 characters (essays)",
+    "You will need to meet the following requirements",
+    "None",
+    "Applicants are required to list their current internships on their initial application",
+    "List your current jobs on your initial application",
+    "Notify Outreachy organizers immediately if you receive a job or internship offer",
+    "You may apply to either internship cohort",
+    "apply for CPT with your university (if on an F-1 visa)"
+  ],
+  "typical_timing": [
+    "Initial applications open: early February for the May-Aug round, late August for the Dec-Mar round",
+    "Initial applications due: end of February for the May-Aug round, early September for the Dec-Mar round",
+    "Contribution period opens: mid March for the May-Aug round, early October for the Dec-Mar round",
+    "Contribution period ends: mid April for the May-Aug round, end of October for the Dec-Mar round",
+    "Interns announced: mid May for the May-Aug round, late November for the Dec-Mar round"
+  ],
+  "applications_closed": true,
+  "dates_for_approved_applicants": [
+    {
+      "event": "Initial application results available",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-05",
+      "time_utc": "16:00"
+    },
+    {
+      "event": "Contribute to projects",
+      "start_date": "2026-10-05",
+      "end_date": "2026-11-02",
+      "time_utc": null
+    },
+    {
+      "event": "Final application deadline",
+      "start_date": "2026-11-02",
+      "end_date": "2026-11-02",
+      "time_utc": "16:00"
+    },
+    {
+      "event": "Accepted interns announced",
+      "start_date": "2026-11-30",
+      "end_date": "2026-11-30",
+      "time_utc": "16:00"
+    }
+  ],
+  "note": "The current round is closed to new applicants. Any dates listed are only for people already approved.",
+  "sources": [
+    "https://www.outreachy.org/apply/project-selection/",
+    "https://www.outreachy.org/docs/applicant/",
+    "https://www.outreachy.org/apply/eligibility/"
+  ],
+  "snapshot_date": "2026-10-04",
+  "total_dates_found": 7
+}
