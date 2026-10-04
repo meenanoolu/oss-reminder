@@ -13,9 +13,8 @@ def as_sentence(text):
 
 def as_cannot(text):
     t = short(text).replace("You cannot apply if ", "", 1).strip().rstrip(".")
-    t = re.sub(r"^you ", "", t)
     if t.startswith("otherwise prohibited"):
-        t = "are " + t
+        t = "you are " + t
     return t
 
 name = sys.argv[1]                      # e.g. gsoc
@@ -39,14 +38,16 @@ def send(title, body, link=None, tags=None):
 
 footer = f"\n\nAs of {data['snapshot_date']}. Always double-check on the official page."
 
-# Message 1: dates
+# Message 1: dates (dates_for_approved_applicants are never sent as reminders)
 if data["dates"]:
     lines = [f"- {d['event']}: {d['start_date']} to {d['end_date']}" for d in data["dates"]]
     body1 = "Upcoming dates:\n" + "\n".join(lines)
 else:
     timing = [t for t in data["typical_timing"] if not any(w in t for w in ORG_WORDS)]
-    body1 = ("Next dates are NOT announced yet. I'll tell you as soon as they appear.\n\n"
-             "Usually:\n" + "\n".join(f"- {short(t)}" for t in timing))
+    head = ("The current round is CLOSED to new applicants. The next round is NOT announced yet. I'll tell you as soon as it appears."
+            if data.get("applications_closed")
+            else "Next dates are NOT announced yet. I'll tell you as soon as they appear.")
+    body1 = head + "\n\nUsually:\n" + "\n".join(f"- {short(t)}" for t in timing)
 send(f"{TITLE}: dates", body1 + footer, link=data["sources"][0], tags="calendar")
 
 # Message 2: can you apply, and what to prepare
@@ -54,7 +55,7 @@ can = [as_sentence(e) for e in data["eligibility"]]
 cannot = [as_cannot(c) for c in data["cannot_apply_if"]]
 body2 = ("You can apply if you:\n" + "\n".join(f"- {c}" for c in can) +
          "\n\nTo apply:\n" + "\n".join(f"- {short(p)}" for p in data["prepare"]) +
-         "\n\nYou cannot apply if you:\n" + "\n".join(f"- {c}" for c in cannot) +
+         "\n\nYou cannot apply if:\n" + "\n".join(f"- {c}" for c in cannot) +
          "\n\nOpen this message in the ntfy app to read it all.")
 send(f"{TITLE}: can you apply?", body2 + footer, link=data["sources"][-1], tags="white_check_mark")
 print("sent 2 messages")

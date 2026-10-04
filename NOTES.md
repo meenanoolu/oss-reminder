@@ -81,12 +81,39 @@ The GSoC contributor rules page has 10 rules: 4 requirements and 6 disqualifiers
   Tapping the notification opens the ntfy app, and the official-page link is at the end of the message.
   Tapping the message text in the app copies it (ntfy default), so the link is what to tap.
 
-## Summary table (GSoC)
-| | v1 | v2 | v3 | v4 | v5 | v6 |
-|---|---|---|---|---|---|---|
-| dates | 3 wrong, 1 missing, past dates included | correct (empty) | correct (empty) | correct (empty) | correct (empty) | correct (empty) |
-| eligibility | 4 of 6 found | all found, 3 junk lines + 1 wrong | all found, 1 flipped | 9 of 10, 0 flipped | 7 of 10 complete, 1 partial, 0 flipped | 9 of 10, 0 flipped |
-| typical_timing | month labels lost | copied exact 2026 dates | correct (code) | correct (code) | correct (code) | correct (code) |
+## v7: found a hidden regression, then isolated program-specific rules
+- After I edited the shared DATES_PROMPT for Outreachy (year and time rules), GSoC total_dates_found
+  dropped from 9 to 0. dates stayed empty, so the output still looked right
+- The code-side filter hid the failure: an empty list looked correct by luck.
+  Compare-Object against the saved v6 file caught it
+- Cause still unknown (year rule, time rule, example, or line-joining)
+- Fix: GSoC uses the exact v6 prompt. Outreachy-only rules live in EXTRA_DATE_RULES,
+  and line-joining runs only for Outreachy
+- Added a plain-code cross-check: count date-looking lines on the page and warn when the model
+  returns fewer than 70 percent of them
+- Result: GSoC total_dates_found is back to 9, output identical to v6 apart from the snapshot date
+- notify.py: the disqualifier header is now "You cannot apply if:" and each line keeps its own
+  "you...", because Outreachy rules have other shapes ("your visa must allow...")
+- Lesson: a shared prompt is shared risk. Keep program-specific rules separate
+
+## Outreachy: what the pages showed (early Oct 2026)
+- Dec 2026 round: initial applications closed Aug 31. Dates still ahead (results Oct 5,
+  contribution period Oct 5 to Nov 2, final application Nov 2, interns announced Nov 30)
+  are only for people already approved, so they must not become reminders for a new applicant
+- Students in India count as northern hemisphere, so they can only apply to the May-Aug round.
+  Non-students can apply to either round. My friend does not have to be a student
+- The eligibility page says its rules are for the Dec 2026 round and may change
+- Page layout differs from GSoC: tab-separated table, year next to each date, wrapped lines
+- Left out the Feb 2026 page (last season) and the diversity statistics paragraph
+  (could be misread as a list of eligible groups; the page says there is no such list)
+- Outreachy bans generative AI in initial application essays, so the tool only relays page text
+  and never writes essays
+
+| | v1 | v2 | v3 | v4 | v5 | v6 | v7 |
+|---|---|---|---|---|---|---|---|
+| dates | 3 wrong, 1 missing, past dates included | correct (empty) | correct (empty) | correct (empty) | correct (empty) | correct (empty) | correct (empty), 9 of 9 found after fix |
+| eligibility | 4 of 6 found | all found, 3 junk lines + 1 wrong | all found, 1 flipped | 9 of 10, 0 flipped | 7 of 10 complete, 1 partial, 0 flipped | 9 of 10, 0 flipped | 9 of 10, 0 flipped |
+| typical_timing | month labels lost | copied exact 2026 dates | correct (code) | correct (code) | correct (code) | correct (code) | correct (code) |
 
 ## Design lessons so far
 1. Use the AI only where it adds something (reading messy text). Dates, filtering, month lists, grammar fixes and source links are done by code
@@ -96,6 +123,7 @@ The GSoC contributor rules page has 10 rules: 4 requirements and 6 disqualifiers
 5. Wrong-but-believable answers are worse than missing ones, so I check every output by hand
 6. Test the output on a real phone, not just in the terminal. That is how I found the cut-off messages
 7. After any prompt change, re-check every field, not just the one I edited (v5)
+8. A shared prompt is shared risk. Keep rules that only one program needs in a separate setting
 
 ## Still to do
 - Email backup
